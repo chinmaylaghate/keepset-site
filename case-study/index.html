@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keepset Case Study</title>
+<meta name="description" content="UX case study: how Keepset went from a market gap to a native iPhone, iPad, Mac and Apple Watch app in 25 days, using design thinking and TestFlight iteration.">
+<link rel="icon" href="/img/mark.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<link rel="canonical" href="https://keepsetapp.com/case-study/">
+<meta property="og:title" content="Keepset: UX case study">
+<meta property="og:description" content="From a gap in the market to a native app on iPhone, iPad, Mac and Apple Watch in 25 days.">
+<meta property="og:url" content="https://keepsetapp.com/case-study/">
+<meta property="og:type" content="article">
+<style>
+:root{
+  --bg:#f6f7f7; --surface:#ffffff; --ink:#111816; --muted:#5b6662; --line:#e2e7e5;
+  --brand:#0f766e; --brand-soft:#e3f2f0; --due:#b45309; --due-soft:#fdf1e3; --bad:#c2410c; --bad-soft:#fdeee6;
+  --ai:#8e3fb8; --shadow:0 1px 2px rgba(0,0,0,.05),0 8px 28px rgba(0,0,0,.06);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d1110; --surface:#161c1b; --ink:#eef3f1; --muted:#9aa7a2; --line:#26302e;
+  --brand:#2dd4bf; --brand-soft:#123532; --due:#fbbf24; --due-soft:#3a2c10; --bad:#fb923c; --bad-soft:#3a2010; --ai:#d08bf5;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.35);
+}}
+:root[data-theme="dark"]{
+  --bg:#0d1110; --surface:#161c1b; --ink:#eef3f1; --muted:#9aa7a2; --line:#26302e;
+  --brand:#2dd4bf; --brand-soft:#123532; --due:#fbbf24; --due-soft:#3a2c10; --bad:#fb923c; --bad-soft:#3a2010; --ai:#d08bf5;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 -apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:var(--brand)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.narrow{max-width:760px}
+header.hero{padding:72px 0 48px}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--brand);margin:0 0 12px}
+h1{font-size:clamp(36px,6vw,64px);line-height:1.05;letter-spacing:-.02em;margin:0 0 20px;font-weight:700}
+h2{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-.015em;margin:0 0 16px}
+h3{font-size:20px;line-height:1.3;margin:0 0 8px}
+.lede{font-size:clamp(18px,2.2vw,22px);color:var(--muted);max-width:760px;margin:0}
+section{padding:72px 0;border-top:1px solid var(--line)}
+.num{font-variant-numeric:tabular-nums}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:40px}
+.stat{background:var(--surface);border-radius:18px;padding:18px 20px;box-shadow:var(--shadow)}
+.stat b{display:block;font-size:34px;line-height:1.1;letter-spacing:-.02em}
+.stat span{font-size:14px;color:var(--muted)}
+.card{background:var(--surface);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand)}
+.pill.due{background:var(--due-soft);color:var(--due)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.problem{font-size:clamp(20px,2.6vw,26px);line-height:1.45;border-left:4px solid var(--brand);padding:4px 0 4px 24px;margin:24px 0}
+ul.clean{list-style:none;padding:0;margin:0}
+ul.clean li{padding:10px 0;border-bottom:1px solid var(--line)}
+ul.clean li:last-child{border-bottom:0}
+.phases{display:flex;gap:8px;flex-wrap:wrap;margin:28px 0}
+.phases a{text-decoration:none;font-size:14px;font-weight:600;padding:8px 14px;border-radius:999px;background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.phases a span{color:var(--brand);margin-right:6px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--line)}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.tablebox{background:var(--surface);border-radius:20px;box-shadow:var(--shadow);overflow-x:auto}
+.phones{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:20px;margin-top:28px}
+.phone figure,.phone{margin:0}
+.phone figcaption{font-size:14px;color:var(--muted);margin-top:10px;line-height:1.4}
+.phone figcaption b{color:var(--ink);display:block}
+.flow{margin:28px 0 0}
+.flow .scroller{overflow-x:auto;background:#fff;border-radius:20px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.flow img{max-width:none;height:440px;width:auto}
+.flow figcaption{font-size:14px;color:var(--muted);margin-top:10px}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--surface);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.compare>div{padding:20px 22px;border-bottom:1px solid var(--line)}
+.compare>div:nth-child(odd){border-right:1px solid var(--line)}
+.compare .h{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--bg)}
+.timeline{position:relative;margin:28px 0 0;padding-left:28px}
+.timeline:before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl{position:relative;padding:0 0 26px}
+.tl:before{content:"";position:absolute;left:-26px;top:7px;width:14px;height:14px;border-radius:50%;background:var(--surface);border:3px solid var(--brand)}
+.tl .d{font-size:13px;font-weight:600;color:var(--brand)}
+.tl.r:before{border-color:var(--bad)}
+.tl.r .d{color:var(--bad)}
+.loop{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:28px}
+@media (max-width:980px){.loop{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.loop{grid-template-columns:1fr}}
+.loop .card h3{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.step{font-size:13px;margin:6px 0 0}
+.step b{display:inline-block;min-width:68px;color:var(--muted);font-weight:600}
+.wide img{border-radius:18px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.wide figcaption{font-size:14px;color:var(--muted);margin-top:10px}
+.platforms{display:grid;grid-template-columns:1.7fr 1.15fr .42fr;gap:36px;align-items:end;margin-top:40px}
+.platforms figure{margin:0}
+.platforms figcaption{font-size:14px;color:var(--muted);margin-top:14px;text-align:center}
+.bar{height:10px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--brand);border-radius:999px}
+.quote{font-size:19px;line-height:1.5;margin:0}
+
+/* Device frames */
+.iphone{position:relative;padding:1.3%;border-radius:17%/8%;background:linear-gradient(150deg,#64676c 0%,#2b2d30 16%,#1b1c1e 50%,#2b2d30 84%,#5c5f64 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),0 20px 40px -14px rgba(0,0,0,.4),0 2px 6px rgba(0,0,0,.18)}
+.iphone::before{content:"";position:absolute;right:-.8%;top:25%;width:1%;height:10%;border-radius:0 3px 3px 0;background:#3a3c40}
+.iphone::after{content:"";position:absolute;left:-.8%;top:19%;width:1%;height:17%;border-radius:3px 0 0 3px;background:linear-gradient(#3a3c40 0 20%,transparent 20% 32%,#3a3c40 32% 62%,transparent 62% 70%,#3a3c40 70%)}
+.iphone .screen{position:relative;background:#000;padding:2.4%;border-radius:16%/7.4%}
+.iphone .screen img{width:100%;border-radius:13%/6.05%;background:#fff}
+.iphone .screen::after{content:"";position:absolute;top:2.35%;left:50%;transform:translateX(-50%);width:29.6%;height:4.1%;border-radius:999px;background:#000}
+.ipad{position:relative;padding:.8%;border-radius:4.2%/5.6%;background:linear-gradient(150deg,#6b6e73,#2c2e31 20%,#1f2023 60%,#5d6065);box-shadow:inset 0 0 0 1px rgba(255,255,255,.2),0 24px 48px -16px rgba(0,0,0,.4)}
+.ipad .screen{position:relative;background:#000;padding:2.4%;border-radius:3.75%/5%}
+.ipad .screen img{width:100%;border-radius:1.8%/2.4%}
+.ipad .screen::after{content:"";position:absolute;top:1.4%;left:50%;width:1.1%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:#1c1d22}
+.macbook{position:relative;padding:0 6.5%}
+.macbook .lid{position:relative;background:#0c0c0d;border-radius:3.4%/5.4%;padding:1.7% 1.7% 2.4%;box-shadow:inset 0 0 0 2px #2c2d30,0 0 0 1.5px #9a9ca1}
+.macbook .lid .screen{position:relative;aspect-ratio:16/10;overflow:hidden;border-radius:.5%/.8%;background:#000}
+.macbook .lid .screen>img{width:100%;height:100%;object-fit:cover}
+.macbook .lid .screen::before{content:"";position:absolute;z-index:2;top:0;left:50%;transform:translateX(-50%);width:8%;height:3.3%;border-radius:0 0 7px 7px;background:#0c0c0d}
+.macbook .base{position:relative;margin:0 -7%;aspect-ratio:100/3;border-radius:0 0 14px 14px/0 0 70% 70%;background:linear-gradient(#f0f1f3 0,#c9cbcf 35%,#9fa1a6 100%);box-shadow:0 22px 34px -18px rgba(0,0,0,.45)}
+.macbook .base::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);width:15%;height:42%;border-radius:0 0 10px 10px;background:linear-gradient(#a5a7ab,#d4d5d8)}
+.macbook .lid .screen.desktop{display:flex;align-items:center;justify-content:center;background:radial-gradient(120% 90% at 20% 10%,#5fb7a8 0,#1d6b62 45%,#0b3a36 100%)}
+.desktop::after{content:"";position:absolute;top:0;left:0;right:0;height:3.3%;background:rgba(255,255,255,.28);backdrop-filter:blur(8px)}
+.desktop>img{width:84%!important;height:auto!important;margin-top:3%;border-radius:1.2%/2%;box-shadow:0 18px 50px rgba(0,0,0,.5),0 0 0 1px rgba(0,0,0,.25)}
+.ultra{position:relative;max-width:100%}
+.ultra .band{width:62%;margin:0 auto;aspect-ratio:2.6/1;background:repeating-linear-gradient(0deg,#2a3036 0 5px,#20252a 5px 7px)}
+.ultra .band.top{border-radius:14px 14px 0 0/30px 30px 0 0}
+.ultra .band.bottom{border-radius:0 0 14px 14px/0 0 30px 30px}
+.ultra .case{position:relative;padding:7.5%;border-radius:24%/20%;background:linear-gradient(145deg,#f1eee8,#c4beb4 30%,#8f8a81 68%,#d9d4cb);box-shadow:inset 0 0 0 1px rgba(255,255,255,.65),inset 0 -2px 4px rgba(0,0,0,.25),0 18px 40px -12px rgba(0,0,0,.45)}
+.ultra .case::before{content:"";position:absolute;left:-4%;top:22%;width:4%;height:21%;border-radius:7px 0 0 7px;background:linear-gradient(90deg,#ff7a2a,#e85a0c)}
+.ultra .case::after{content:"";position:absolute;right:-7%;top:24%;width:7%;height:22%;border-radius:0 7px 7px 0;background:repeating-linear-gradient(0deg,#a39e95 0 2px,#d6d1c8 2px 4px);box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.ultra .screen{background:#000;padding:6%;border-radius:19%/16%}
+.ultra .screen img{width:100%;border-radius:13%/11%}
+.ultra .crownguard{position:absolute;right:-3%;top:20%;width:3.5%;height:52%;border-radius:0 10px 10px 0;background:linear-gradient(90deg,#b2ada4,#e2ddd5)}
+.ultra .sidebtn{position:absolute;right:-2.5%;top:58%;width:2.5%;height:16%;border-radius:0 6px 6px 0;background:#b7b2a9}
+/* Hero lineup */
+.lineup{position:relative;max-width:1040px;margin:56px auto 0;padding-bottom:1%}
+.lineup .l-mac{width:70%;margin:0 auto}
+.lineup .l-ipad{position:absolute;left:0;bottom:0;width:30%}
+.lineup .l-iphone{position:absolute;right:8.5%;bottom:0;width:12%}
+.lineup .l-watch{position:absolute;right:0;bottom:1%;width:8%}
+/* Flows */
+.flowrow{margin-top:44px}
+.flowhead h3{margin:0}
+.flowhead p{margin:4px 0 0;color:var(--muted);font-size:15px}
+.flowhead .count{color:var(--brand);font-weight:600;font-size:13px;margin-left:6px;white-space:nowrap}
+.flowtrack{display:flex;align-items:flex-start;gap:18px;overflow-x:auto;scroll-snap-type:x proximity;--bleed:max(24px,calc((100vw - 1120px) / 2 + 24px));margin-inline:calc(-1 * var(--bleed));padding:20px var(--bleed) 64px;scroll-padding-inline:var(--bleed);margin-bottom:-36px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.flowtrack:focus-visible{outline:2px solid var(--brand);outline-offset:-2px;border-radius:12px}
+.fstep{margin:0;flex:0 0 196px;scroll-snap-align:start}
+.fstep figcaption{font-size:13px;line-height:1.35;min-height:40px;margin-bottom:12px}
+.fstep figcaption b{display:block;font-size:14px;color:var(--ink)}
+.fstep figcaption span{color:var(--brand)}
+.farrow{flex:0 0 auto;align-self:center;margin-top:52px;color:var(--muted);font-size:22px}
+.cardshot{width:72%;margin:18px auto 4px}
+.cardshot.mac{width:100%}
+.lesson{margin-top:16px}
+.lesson .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:6px}
+.lesson .steps .step b{display:block;min-width:0}
+@media (max-width:760px){
+  .fstep{flex-basis:150px}
+  .flowtrack{--bleed:16px}
+  .lesson .steps{grid-template-columns:1fr;gap:4px}
+  .platforms{grid-template-columns:1fr 1fr}
+  .platforms figure:first-child{grid-column:1/-1}
+}
+footer{padding:48px 0 80px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+.homelink{position:fixed;top:14px;left:14px;z-index:5;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;font:600 13px/1.4 inherit;text-decoration:none;box-shadow:var(--shadow);min-height:36px}
+.toggle{position:fixed;top:14px;right:14px;z-index:5;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;font:600 13px/1 inherit;cursor:pointer;box-shadow:var(--shadow);min-height:36px}
+@media (max-width:760px){
+  .wrap{padding:0 16px}
+  section{padding:52px 0}
+  header.hero{padding:56px 0 32px}
+  .compare{grid-template-columns:1fr}
+  .compare>div:nth-child(odd){border-right:0}
+  .compare .h:nth-child(2){display:none}
+  .compare>div:not(.h)::before{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;margin-bottom:4px;color:var(--muted)}
+  .compare>div:not(.h):nth-child(odd)::before{content:"Plan"}
+  .compare>div:not(.h):nth-child(even)::before{content:"Reality";color:var(--brand)}
+  .compare .h:first-child{display:none}
+  .platforms{grid-template-columns:1fr}
+  .flow img{height:300px}
+  .phones{grid-template-columns:repeat(2,1fr);gap:14px}
+}
+</style>
+</head>
+<body>
+<a class="homelink" href="https://keepsetapp.com/">← Keepset</a>
+<button class="toggle" id="themeToggle" aria-label="Switch light or dark">Theme</button>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">UX case study · iPhone, iPad, Mac, Apple Watch · 2026</p>
+    <h1>Keepset: one private place for everything you own</h1>
+    <p class="lede">How a product designer, working with an AI engineer, went from a gap in the market to a native app on four Apple platforms in 25 days. Design thinking in theory, and what really happened when the plan met Xcode, TestFlight and App Review.</p>
+    <div class="stats num">
+      <div class="stat"><b>25</b><span>days, plan to App Review</span></div>
+      <div class="stat"><b>93</b><span>commits</span></div>
+      <div class="stat"><b>10</b><span>TestFlight builds</span></div>
+      <div class="stat"><b>4</b><span>platforms from one codebase</span></div>
+      <div class="stat"><b>218</b><span>automated tests</span></div>
+      <div class="stat"><b>0</b><span>servers, logins or trackers</span></div>
+    </div>
+    <div class="lineup" aria-label="Keepset on Mac, iPad, iPhone and Apple Watch">
+      <div class="l-mac"><div class="macbook"><div class="lid"><div class="screen desktop"><img src="images/web/mac-window-details.jpg" alt="Keepset on a MacBook"></div></div><div class="base"></div></div></div>
+      <div class="l-ipad"><div class="ipad"><div class="screen"><img src="images/web/ipad-wide-panel.jpg" alt="Keepset on iPad"></div></div></div>
+      <div class="l-iphone"><div class="iphone"><div class="screen"><img src="images/web/home.jpg" alt="Keepset on iPhone"></div></div></div>
+      <div class="l-watch"><div class="ultra"><div class="band top"></div><div class="case"><div class="crownguard"></div><div class="sidebtn"></div><div class="screen"><img src="images/web/watch-coming-up.jpg" alt="Keepset on Apple Watch Ultra"></div></div><div class="band bottom"></div></div></div>
+    </div>
+    <nav class="phases" aria-label="Sections">
+      <a href="#problem"><span>01</span>Problem</a>
+      <a href="#team"><span>02</span>Team</a>
+      <a href="#plan"><span>03</span>Execution plan</a>
+      <a href="#research"><span>04</span>Research</a>
+      <a href="#design"><span>05</span>Design</a>
+      <a href="#build"><span>06</span>Build</a>
+      <a href="#testing"><span>07</span>TestFlight</a>
+      <a href="#iterate"><span>08</span>Iteration</a>
+      <a href="#improve"><span>09</span>Improvements</a>
+      <a href="#metrics"><span>10</span>Metrics</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- 01 PROBLEM -->
+<section id="problem">
+  <div class="wrap">
+    <p class="eyebrow">01 · Problem statement</p>
+    <h2>The facts of our lives are scattered</h2>
+    <div class="narrow">
+      <p class="problem">People who look after a pet, a car, a home, a parent or a passport keep the important facts in five places: a vet email, a photo of a paper, a voice memo, a sticky note and a calendar alert. When the vaccine is due or the warranty runs out, nobody can find the one thing they need.</p>
+      <p>Existing apps solve one slice each, and most of them ask for an account and keep your records on their servers. Some of them have since shut down and taken people's data with them.</p>
+      <h3>How might we…</h3>
+      <ul class="clean">
+        <li>…give every thing a person owns its own timeline, so a vet bill, a voice note and the next vaccine date live together?</li>
+        <li>…make capture as fast as talking, so details get saved in the moment and not "later"?</li>
+        <li>…remind people before things are due, without asking them to trust a server with their life?</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 02 TEAM -->
+<section id="team">
+  <div class="wrap">
+    <p class="eyebrow">02 · Team</p>
+    <h2>A designer and an AI engineer</h2>
+    <p class="lede narrow">A deliberately small team. The split of decisions was written down on day one, so neither side waited on the other.</p>
+    <div class="grid2" style="margin-top:28px">
+      <div class="card">
+        <span class="pill">Owner</span>
+        <h3 style="margin-top:12px">Product designer</h3>
+        <p class="muted">Vision, research, the Figma Make prototype, every taste call, Apple accounts, App Store Connect, testing on real devices, and the final yes on each build.</p>
+        <ul class="clean small">
+          <li>Approved each phase plan before any code</li>
+          <li>Ran feedback rounds on real iPhone, iPad, Mac and Watch</li>
+          <li>Made the pricing and Free versus Pro calls</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="pill due">Engineer</span>
+        <h3 style="margin-top:12px">Claude, in Claude Code</h3>
+        <p class="muted">Turned the prototype into native SwiftUI, made the technical calls and wrote down why, wrote the tests, archived and uploaded builds, and drafted App Review replies.</p>
+        <ul class="clean small">
+          <li>Plan first in a shared task list, then build</li>
+          <li>No task marked done without build, tests and a simulator check</li>
+          <li>After every correction, a written lesson (26 so far)</li>
+        </ul>
+      </div>
+    </div>
+    <p class="small muted" style="margin-top:16px">Working rule from the project file: "The owner is a product designer, not a developer. Explain choices in simple words." Every technical decision came with a plain-language reason.</p>
+  </div>
+</section>
+
+<!-- 03 PLAN -->
+<section id="plan">
+  <div class="wrap">
+    <p class="eyebrow">03 · Execution plan</p>
+    <h2>The plan, and what really happened</h2>
+    <p class="lede narrow">Design thinking draws five neat stages. Real shipping loops back through them many times. Here is the plan we wrote, next to what the git history says.</p>
+    <div class="compare" style="margin-top:28px">
+      <div class="h">The plan (day 1)</div><div class="h">The reality (git history)</div>
+      <div><b>Empathize and define</b><br><span class="muted small">Market and competitor research, problem framing, Free and Pro model.</span></div>
+      <div><b>Done before code.</b> <span class="muted small">17 competitors profiled. The research also named the biggest risk: Apple itself adding smart reminders to its own apps in iOS 27.</span></div>
+      <div><b>Ideate and prototype</b><br><span class="muted small">Figma Make prototype as the design source of truth.</span></div>
+      <div><b>Prototype kept as a reference only.</b> <span class="muted small">Figma Make outputs React web code. Every screen was rebuilt in native SwiftUI, mapped screen by screen in a design map.</span></div>
+      <div><b>Build in 14 phases</b><br><span class="muted small">Design system, data, shell, screens, edit, add flows, voice, onboarding, notifications, settings, Pro, widgets, accessibility.</span></div>
+      <div><b>All 14 phases in 2 days</b> <span class="muted small">(24 to 25 Oct). The plan held because each phase ended with build, tests and a light and dark simulator check.</span></div>
+      <div><b>Test</b><br><span class="muted small">TestFlight, then submit iPhone 1.0.</span></div>
+      <div><b>Test became the main loop.</b> <span class="muted small">10 builds, owner and friends rounds, and 5 App Review conversations. Each one fed straight back into design.</span></div>
+      <div><b>Scope</b><br><span class="muted small">iPhone first.</span></div>
+      <div><b>Scope grew on purpose:</b> <span class="muted small">iPad and Mac on day 10, AI apps on the Mac on day 13, Apple Watch on day 14, all from the same code.</span></div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl"><div class="d">24 Oct</div><b>Project set up, design map written, phases 0 to 5b built</b><div class="muted small">Design system, data model, tabs, Home, keeper pages, Organizer, Search, editing.</div></div>
+      <div class="tl"><div class="d">25 Oct</div><b>Add flows, scan, voice moments, onboarding, App Lock, notifications, Pro, widgets, Siri, accessibility</b><div class="muted small">"Things" renamed to "Keeper" everywhere.</div></div>
+      <div class="tl"><div class="d">26 Oct</div><b>Logo, app icon, App Store Connect, landing page</b></div>
+      <div class="tl"><div class="d">27 Oct</div><b>iCloud sync with CloudKit. Build 1.0 (2) on TestFlight</b><div class="muted small">Build 1.0 (1) went up the day before.</div></div>
+      <div class="tl"><div class="d">2 Nov</div><b>First owner feedback round (14 items). Build 3</b></div>
+      <div class="tl"><div class="d">3 Nov</div><b>iPad and native Mac app from the same code. Build 4 to the Friends group</b></div>
+      <div class="tl"><div class="d">4 to 6 Nov</div><b>Mac sidebar, Siri and Shortcuts, AI apps on the Mac (1.1), Apple Watch lite. Builds 5 to 7</b></div>
+      <div class="tl r"><div class="d">12 Nov</div><b>Mac rejected: camera entitlement, window can't reopen. Build 8</b></div>
+      <div class="tl r"><div class="d">15 Nov</div><b>iPad rejected: camera opened without explaining. Build 9</b></div>
+      <div class="tl r"><div class="d">17 Nov</div><b>iOS rejected: paywall showed "Subscription Unavailable". Build 10</b></div>
+      <div class="tl"><div class="d">18 Nov</div><b>iOS and macOS 1.1 (10) resubmitted with replies</b><div class="muted small">Waiting for review at the time of writing.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 RESEARCH -->
+<section id="research">
+  <div class="wrap">
+    <p class="eyebrow">04 · Research · Empathize</p>
+    <h2>A split market, mostly in the cloud</h2>
+    <p class="lede narrow">Desk research across home inventory, family vault, pet, car and voice apps, plus Apple's own apps in iOS 27.</p>
+    <div class="grid3" style="margin-top:28px">
+      <div class="card"><h3>Everyone does one slice</h3><p class="muted small">HomeZada and Itemtopia do home items. 11pets does pets. CARFAX Car Care does cars. AudioPen and Whisper Memos do voice. None of them joins a timeline per thing, voice capture and reminders.</p></div>
+      <div class="card"><h3>Paywalls frustrate people</h3><p class="muted small">Itemtopia stops at 20 items on the free plan, Centriq stopped at 5, and 11pets users complain about a paywall in the middle of setup.</p></div>
+      <div class="card"><h3>The cloud can disappear</h3><p class="muted small">Centriq, a known appliance app, shut down and deleted accounts. Most others need an account and keep records on their servers.</p></div>
+      <div class="card"><h3>Apple is the real competitor</h3><p class="muted small">iOS 27 Reminders turns your own words into reminders, and Files suggests names. Keepset has to be the best record for each thing, not just a smart reminder maker.</p></div>
+      <div class="card"><h3>On-device AI is now free</h3><p class="muted small">Apple's Foundation Models runs on the device, works offline and costs nothing per use. Smart features can be private by default.</p></div>
+      <div class="card"><h3>What people asked for</h3><p class="muted small">One Itemtopia reviewer asked to remove the item limit, or let people use iCloud storage. That request became Keepset's model.</p></div>
+    </div>
+
+    <h3 style="margin-top:44px">Feature gap</h3>
+    <div class="tablebox" style="margin-top:12px">
+      <table>
+        <thead><tr><th>App</th><th>Timeline per thing</th><th>Voice to entry</th><th>On-device</th><th>No account</th><th>Free limit</th></tr></thead>
+        <tbody>
+          <tr><td>Itemtopia</td><td>Partial</td><td>No</td><td>No</td><td>No</td><td>20 items</td></tr>
+          <tr><td>11pets</td><td>Pets only</td><td>No</td><td>No</td><td>No</td><td>1 pet</td></tr>
+          <tr><td>CARFAX Car Care</td><td>Cars only</td><td>No</td><td>No</td><td>No</td><td>8 vehicles</td></tr>
+          <tr><td>AudioPen</td><td>No</td><td>Text only</td><td>No</td><td>No</td><td>About 10 notes</td></tr>
+          <tr><td>Apple Notes and Reminders</td><td>No</td><td>Partial</td><td>Yes</td><td>Yes</td><td>None</td></tr>
+          <tr><td><b>Keepset</b></td><td><b>Every kind</b></td><td><b>Yes</b></td><td><b>Yes</b></td><td><b>Yes</b></td><td><b>Unlimited</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="margin-top:44px">Who we designed for</h3>
+    <p class="muted small narrow">Built from the research categories. These are proto-personas, not interview results: the next round of research should test them.</p>
+    <div class="grid3" style="margin-top:12px">
+      <div class="card"><span class="pill">Pet parent</span><p class="small" style="margin-top:10px">Vet visits, vaccines, food brand, the clinic's number. Wants the next due date without opening three apps.</p></div>
+      <div class="card"><span class="pill">Home and car owner</span><p class="small" style="margin-top:10px">Boiler service, smoke alarm battery, registration. Wants papers scanned once and found again in seconds.</p></div>
+      <div class="card"><span class="pill">Family organizer</span><p class="small" style="margin-top:10px">Passports, a parent's medicines, warranties. Wants everything private and off other people's servers.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 DESIGN -->
+<section id="design">
+  <div class="wrap">
+    <p class="eyebrow">05 · Define, ideate, design</p>
+    <h2>Keepers, each with a timeline</h2>
+    <p class="lede narrow">One idea carries the product: everything a person owns is a <b>keeper</b> (Pet, Car, Home, Person, Device, Document or Custom), and every keeper has a timeline of entries: Voice moment, Document, Photo, Note, Reminder, Place, Link and Contact.</p>
+
+    <h3 style="margin-top:36px">Design principles</h3>
+    <div class="grid2" style="margin-top:12px">
+      <div class="card"><b>Private by default.</b> <span class="muted">No login, no server, no analytics. The privacy promise sits in onboarding, not in a policy page.</span></div>
+      <div class="card"><b>Capture first, organize later.</b> <span class="muted">Hold to talk. Keepset suggests a title and a keeper, and the person can change anything.</span></div>
+      <div class="card"><b>Never guess for people.</b> <span class="muted">No made-up dates, and no AI suggestion that isn't based on what the app actually read.</span></div>
+      <div class="card"><b>Apple native, calm.</b> <span class="muted">Liquid Glass only on navigation and controls. Brand teal for the selected tab, Add and main buttons. Everything else uses system styles.</span></div>
+    </div>
+
+    <div class="phones">
+      <figure class="phone"><div class="iphone"><div class="screen"><img src="images/web/onboarding-privacy.jpg" alt="Onboarding privacy screen" loading="lazy"></div></div><figcaption><b>Privacy, step 2</b>The promise comes before any question.</figcaption></figure>
+      <figure class="phone"><div class="iphone"><div class="screen"><img src="images/web/onboarding-pick.jpg" alt="Onboarding: pick what to keep track of" loading="lazy"></div></div><figcaption><b>Pick keepers</b>Set up in a few taps, no account.</figcaption></figure>
+      <figure class="phone"><div class="iphone"><div class="screen"><img src="images/web/home.jpg" alt="Home screen with Coming up and Recent" loading="lazy"></div></div><figcaption><b>Home</b>Coming up first, then Recent.</figcaption></figure>
+      <figure class="phone"><div class="iphone"><div class="screen"><img src="images/web/keeper-max.jpg" alt="Max's keeper page" loading="lazy"></div></div><figcaption><b>A keeper's page</b>Details, then the timeline.</figcaption></figure>
+    </div>
+
+    <h3 style="margin-top:52px">The signature flow: a voice moment</h3>
+    <p class="muted narrow">Hold to talk, slide up to lock, let go. Live words while you speak, then on-device suggestions you can change.</p>
+    <div class="phones">
+      <figure class="phone"><div class="iphone"><div class="screen"><img src="images/web/add-sheet.jpg" alt="Add sheet with all add options" loading="lazy"></div></div><figcaption><b>1 · Add</b>Every way to add, one tap away.</figcaption></figure>
+      <figure class="phone"><div class="iphone"><div class="screen"><img src="images/web/voice-recording.jpg" alt="Voice moment recording" loading="lazy"></div></div><figcaption><b>2 · Recording</b>Hold to talk, live words.</figcaption></figure>
+      <figure class="phone"><div class="iphone"><div class="screen"><img src="images/web/voice-suggestions.jpg" alt="Voice moment suggestions made on this iPhone" loading="lazy"></div></div><figcaption><b>3 · Suggestions</b>"Suggestions made on this iPhone. Change anything."</figcaption></figure>
+      <figure class="phone"><div class="iphone"><div class="screen"><img src="images/web/entry-voice.jpg" alt="Saved voice moment entry" loading="lazy"></div></div><figcaption><b>4 · Saved</b>Playback, transcript, on the keeper's timeline.</figcaption></figure>
+    </div>
+
+    <h3 style="margin-top:52px">Prototype versus shipped</h3>
+    <p class="muted narrow">The Figma Make prototype answered "what". Building native answered "how it should feel on an iPhone". These are the real differences.</p>
+    <div class="tablebox" style="margin-top:12px">
+      <table>
+        <thead><tr><th>Area</th><th>Figma Make prototype</th><th>Shipped app</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>Name</td><td>"Binder" and "Things"</td><td>Keepset and "Keeper"</td><td>A name people can own, and one noun across the app</td></tr>
+          <tr><td>Add</td><td>Floating round button over the content</td><td>Glass + beside the Liquid Glass tab bar</td><td>Native iOS 27 pattern; never covers cards</td></tr>
+          <tr><td>Search</td><td>A tab of its own</td><td>Magnifying glass, top right of every tab</td><td>Search from where you are; the tab bar stays at three</td></tr>
+          <tr><td>Paywall</td><td>Custom screen</td><td>Apple's store, plus our own page when plans don't load</td><td>Trust, and no dead ends (App Review)</td></tr>
+          <tr><td>Dates from AI</td><td>Filled in from the words</td><td>Never filled in; "Add reminder" starts off</td><td>A wrong date is worse than none</td></tr>
+          <tr><td>Platforms</td><td>One phone frame</td><td>iPhone, iPad, Mac, Apple Watch</td><td>Same code, adapts by size, not by device</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flowrow" style="margin-top:52px" id="flow-home"><div class="flowhead"><h3>Home</h3><p>The start tab: coming up, recent, notifications and search. <span class="count">5 screens</span></p></div><div class="flowtrack" tabindex="0" aria-label="Home flow, scroll sideways"><figure class="fstep"><figcaption><b>Home</b><span>Home tab</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/home-01.jpg" alt="Home" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Notifications</b><span>Bell, top right</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/home-02.jpg" alt="Notifications" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Undo toast</b><span>Done on a notification</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/home-03.jpg" alt="Undo toast" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Search</b><span>Magnifying glass, any tab</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/home-04.jpg" alt="Search" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Search results</b><span>Typing “vet”</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/home-05.jpg" alt="Search results" loading="lazy"></div></div></figure></div></div>
+  </div>
+</section>
+
+<!-- 06 BUILD -->
+<section id="build">
+  <div class="wrap">
+    <p class="eyebrow">06 · Build · Prototype to product</p>
+    <h2>Native SwiftUI, Apple frameworks only</h2>
+    <p class="lede narrow">The prototype was never shipped. A design map tied every prototype screen and component to its SwiftUI version, so design intent survived the rebuild.</p>
+    <div class="grid3" style="margin-top:28px">
+      <div class="card"><h3>One codebase</h3><p class="muted small">iPhone and iPad share one build. The Mac is a native macOS app from the same code, with the same app ID, so Pro and iCloud carry over. The Watch lives inside the iPhone app.</p></div>
+      <div class="card"><h3>Platform rules in two files</h3><p class="muted small">Every difference between devices sits in two small files. Screens adapt by size, never by asking "is this an iPad".</p></div>
+      <div class="card"><h3>AI with a manual path</h3><p class="muted small">Foundation Models, Speech and Vision run on the device. Each AI feature checks if Apple Intelligence is available and always shows a manual way.</p></div>
+      <div class="card"><h3>No network by default</h3><p class="muted small">The only calls out: link previews the person pastes, the App Store, iCloud sync for Pro users who turn it on, and Apple Maps when adding a place.</p></div>
+      <div class="card"><h3>Accessible from day one</h3><p class="muted small">Dynamic Type, VoiceOver labels, 44 pt targets, never color alone. Every view has a preview with demo data in light and dark.</p></div>
+      <div class="card"><h3>Reaches beyond the app</h3><p class="muted small">Widgets, Siri and Shortcuts, Control Center, Share extension, Apple Calendar and Reminders, and AI apps on the Mac through MCP.</p></div>
+    </div>
+
+    <div class="platforms">
+      <figure><div class="macbook"><div class="lid"><div class="screen desktop"><img src="images/web/mac-window-details.jpg" alt="Keepset on the Mac with the details panel open" loading="lazy"></div></div><div class="base"></div></div><figcaption>Mac: own sidebar, details panel on the right.</figcaption></figure>
+      <figure><div class="ipad"><div class="screen"><img src="images/web/ipad-wide-panel.jpg" alt="Keepset on iPad with cards two across and the details panel" loading="lazy"></div></div><figcaption>iPad: cards two across, same panel.</figcaption></figure>
+      <figure><div class="ultra"><div class="band top"></div><div class="case"><div class="crownguard"></div><div class="sidebtn"></div><div class="screen"><img src="images/web/watch-coming-up.jpg" alt="Keepset on Apple Watch Ultra showing Coming up" loading="lazy"></div></div><div class="band bottom"></div></div><figcaption>Watch lite: Coming up, Done, Snooze.</figcaption></figure>
+    </div>
+    <p class="small muted">iPad, Mac and Watch images are App Store and app captures. All iPhone screens come from the Design inventory page in Figma.</p>
+  </div>
+</section>
+
+<!-- 07 TESTING -->
+<section id="testing">
+  <div class="wrap">
+    <p class="eyebrow">07 · Testing with TestFlight</p>
+    <h2>Three layers of testing</h2>
+    <p class="lede narrow">Automated tests catch regressions, TestFlight catches what only real hands and real devices find, and App Review is the strictest tester of all.</p>
+    <div class="grid3" style="margin-top:28px">
+      <div class="card"><span class="pill">Layer 1</span><h3 style="margin-top:10px">Automated</h3><p class="muted small">218 unit and UI tests. UI tests on iPhone and iPad, unit tests on all three platforms. A change counts as done only when all three pass.</p></div>
+      <div class="card"><span class="pill due">Layer 2</span><h3 style="margin-top:10px">TestFlight</h3><p class="muted small">An internal "Owner" group from build 1, then a "Friends" group from build 4, with a plain-words "What to test" note for each build.</p></div>
+      <div class="card"><span class="pill bad">Layer 3</span><h3 style="margin-top:10px">App Review</h3><p class="muted small">Five review conversations across iOS and macOS. Each one became a fix, a test and a written lesson.</p></div>
+    </div>
+
+    <h3 style="margin-top:44px">Builds</h3>
+    <div class="tablebox" style="margin-top:12px">
+      <table class="num">
+        <thead><tr><th>Build</th><th>Date</th><th>What it tested</th></tr></thead>
+        <tbody>
+          <tr><td>1.0 (1)</td><td>26 Oct</td><td>First upload: the full iPhone app, internal Owner group</td></tr>
+          <tr><td>1.0 (2)</td><td>27 Oct</td><td>iCloud sync with CloudKit</td></tr>
+          <tr><td>1.0 (3)</td><td>2 Nov</td><td>Owner round: Add in the glass circle, entry cards, no made-up dates, import, widgets, crash fix</td></tr>
+          <tr><td>1.0 (4)</td><td>3 Nov</td><td>iPad and Mac; first build to the Friends group</td></tr>
+          <tr><td>1.0 (5)</td><td>4 Nov</td><td>Mac sidebar, details panels, Siri and Shortcuts</td></tr>
+          <tr><td>1.1 (6)</td><td>6 Nov</td><td>AI apps on the Mac (MCP)</td></tr>
+          <tr><td>1.1 (7)</td><td>6 Nov</td><td>Apple Watch lite</td></tr>
+          <tr><td>1.1 (8)</td><td>12 Nov</td><td>Mac App Review fixes</td></tr>
+          <tr><td>1.1 (9)</td><td>15 Nov</td><td>Camera permission explained first</td></tr>
+          <tr><td>1.1 (10)</td><td>17 Nov</td><td>Paywall that never dead-ends</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="margin-top:44px">What real devices found that the simulator didn't</h3>
+    <div class="grid2" style="margin-top:12px">
+      <div class="card"><b>Crashes on the owner's iPhone.</b> <span class="muted small">Undo after Save removed an entry a screen was still drawing. Fix: soft delete, removed for good only when the Undo toast ends.</span></div>
+      <div class="card"><b>Blank card spaces on the Keeper tab.</b> <span class="muted small">iCloud had stored two keepers twice. Fix: show one per id and never auto-merge while sync runs, so no device can lose data.</span></div>
+      <div class="card"><b>"Sync doesn't work."</b> <span class="muted small">The code was fine: one device had a developer build and one had TestFlight, which use different iCloud databases. Lesson: test sync with matching builds.</span></div>
+      <div class="card"><b>The Mac's gear did nothing.</b> <span class="muted small">Pages pushed on a tab that wasn't open never showed. Fix: the Mac got its own sidebar, plus tests that switch tabs first.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 ITERATE -->
+<section id="iterate">
+  <div class="wrap">
+    <p class="eyebrow">08 · Iterative process</p>
+    <h2>Every "no" became a better design</h2>
+    <p class="lede narrow">Each review followed the same loop: what we heard, the root cause, the design change, and a test so it can't come back.</p>
+    <div class="loop">
+      <div class="card">
+        <h3>Camera, explained first <span class="pill bad">5.1.1(iv)</span></h3>
+        <p class="step"><b>Heard</b>After "Don't Allow", people were sent to Settings.</p>
+        <p class="step"><b>Cause</b>Scan opened the camera the moment it appeared.</p>
+        <p class="step"><b>Change</b>A short explanation and a Continue button first. After a no, never open the camera again: offer "Choose a photo".</p>
+        <div class="cardshot"><div class="iphone"><div class="screen"><img src="images/web/scan-explain.jpg" alt="Scan explanation screen before the camera" loading="lazy"></div></div></div>
+      </div>
+      <div class="card">
+        <h3>A paywall with no dead end <span class="pill bad">2.1(a)</span></h3>
+        <p class="step"><b>Heard</b>The reviewer saw "Subscription Unavailable".</p>
+        <p class="step"><b>Cause</b>Their App Store returned no plans, and Apple's store screen gave up.</p>
+        <p class="step"><b>Change</b>Load plans first. If none arrive, show our own page with Try again, Restore purchases and Close.</p>
+        <div class="cardshot"><div class="iphone"><div class="screen"><img src="images/web/paywall-no-plans.jpg" alt="Paywall when plans did not load" loading="lazy"></div></div></div>
+      </div>
+      <div class="card">
+        <h3>A Mac that behaves like a Mac <span class="pill bad">4 · 2.4.5</span></h3>
+        <p class="step"><b>Heard</b>The main window couldn't be reopened, and the app asked for a camera it never used.</p>
+        <p class="step"><b>Cause</b>iPhone habits carried over to the Mac.</p>
+        <p class="step"><b>Change</b>One main window listed in the Window menu, every menu command works with the window closed, and no camera on the Mac.</p>
+        <div class="cardshot mac"><div class="macbook"><div class="lid"><div class="screen desktop"><img src="images/web/mac-window-home.jpg" alt="Keepset main window on the Mac desktop with its own sidebar" loading="lazy"></div></div><div class="base"></div></div></div>
+      </div>
+      <div class="card">
+        <h3>No made-up dates <span class="pill">Owner round</span></h3>
+        <p class="step"><b>Heard</b>Voice and scan filled in dates and turned on reminders by themselves.</p>
+        <p class="step"><b>Cause</b>Optimistic AI defaults.</p>
+        <p class="step"><b>Change</b>No date and no reminder unless the person adds one. Tests check that "next week" in the words saves no date.</p>
+      </div>
+      <div class="card">
+        <h3>Add where the thumb is <span class="pill">Owner round</span></h3>
+        <p class="step"><b>Heard</b>Add and Search competed for attention.</p>
+        <p class="step"><b>Change</b>Add moved into the glass circle beside the tab bar. Search moved to a magnifying glass on every tab.</p>
+      </div>
+      <div class="card">
+        <h3>Cards and icons that read at a glance <span class="pill">Owner round</span></h3>
+        <p class="step"><b>Heard</b>Keepers and entries looked alike.</p>
+        <p class="step"><b>Change</b>Keepers get a solid color squircle, entries a soft gray circle. One 44 pt icon size for every type, and each entry is its own card.</p>
+      </div>
+    </div>
+
+    <div class="card lesson">
+      <h3>A switch is not a feature <span class="pill">One of 26 lessons</span></h3>
+      <div class="steps">
+        <p class="step"><b>Heard</b>Settings had an iCloud sync switch, but turning it on did nothing.</p>
+        <p class="step"><b>Cause</b>The switch shipped before the app had iCloud set up with Apple.</p>
+        <p class="step"><b>Change</b>A feature counts as done only when it works from end to end on a real device, including the Apple setup it needs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 IMPROVEMENTS -->
+<section id="improve">
+  <div class="wrap">
+    <p class="eyebrow">09 · Improvements</p>
+    <h2>What's next</h2>
+    <div class="grid2" style="margin-top:20px">
+      <div class="card">
+        <h3>Product</h3>
+        <ul class="clean small">
+          <li><b>Ask Keepset</b>: questions about your own records, answered on the device</li>
+          <li><b>Warranties</b> as an entry type on a keeper</li>
+          <li><b>Family sharing</b> of a keeper</li>
+          <li><b>Translation</b> of the app</li>
+          <li><b>Watch</b>: keeper pages and Siri, if people use the Watch app</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Experience and quality</h3>
+        <ul class="clean small">
+          <li>Measure launch time on a real iPhone. Simulator release builds took 5 to 7 s, and part of that is the simulator itself</li>
+          <li>Check that every outside entry point (notification, widget, Spotlight) opens the Mac window when it's closed</li>
+          <li>Interview real pet, home and family users to test the proto-personas</li>
+          <li>Run usability tests on the voice flow with first-time users</li>
+          <li>Dark mode and Watch captures added to the Figma inventory</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 METRICS -->
+<section id="metrics">
+  <div class="wrap">
+    <p class="eyebrow">10 · Metrics</p>
+    <h2>What we can measure, honestly</h2>
+    <p class="lede narrow">Keepset has no analytics by design, so there are no in-app numbers to show. Here is what the delivery itself measured, and how success will be tracked after launch without tracking people.</p>
+
+    <h3 style="margin-top:36px">Delivery metrics (measured)</h3>
+    <div class="grid3 num" style="margin-top:12px">
+      <div class="card"><b style="font-size:28px">2 days</b><div class="muted small">to build all 14 planned phases</div><div class="bar"><i style="width:8%"></i></div><div class="small muted" style="margin-top:6px">of a 25-day project</div></div>
+      <div class="card"><b style="font-size:28px">2 days</b><div class="muted small">first commit to first TestFlight upload</div><div class="bar"><i style="width:8%"></i></div></div>
+      <div class="card"><b style="font-size:28px">1 to 2 days</b><div class="muted small">from each App Review rejection to a fixed build</div><div class="bar"><i style="width:30%"></i></div></div>
+      <div class="card"><b style="font-size:28px">224</b><div class="muted small">screens captured (iPhone 76, iPad 77, Mac 71); 61 iPhone screens in the Figma inventory</div></div>
+      <div class="card"><b style="font-size:28px">218</b><div class="muted small">automated tests, run on iPhone, iPad and Mac before each build</div></div>
+      <div class="card"><b style="font-size:28px">~18,600</b><div class="muted small">lines of Swift in 129 files, no third-party packages</div></div>
+    </div>
+
+    <h3 style="margin-top:44px">Success metrics (after launch)</h3>
+    <p class="muted small narrow">Targets are goals to check against, not results yet. All of them come from App Store Connect and StoreKit, which Apple reports in aggregate, so no data leaves the person's device.</p>
+    <div class="tablebox" style="margin-top:12px">
+      <table>
+        <thead><tr><th>Question</th><th>Metric</th><th>Source</th><th>Goal</th></tr></thead>
+        <tbody>
+          <tr><td>Do people find it?</td><td>Product page to download conversion</td><td>App Store Connect</td><td>Above category average</td></tr>
+          <tr><td>Do they come back?</td><td>Day 7 and day 30 retention (people who share data with developers)</td><td>App Store Connect</td><td>Day 30 above 20%</td></tr>
+          <tr><td>Is it worth paying for?</td><td>Free to Pro conversion, AI apps purchases</td><td>App Store Connect, StoreKit</td><td>3 to 5% of active users</td></tr>
+          <tr><td>Does it stay stable?</td><td>Crash-free sessions</td><td>Xcode Organizer</td><td>Above 99.5%</td></tr>
+          <tr><td>Do people love it?</td><td>Rating and review themes</td><td>App Store</td><td>4.6 or higher</td></tr>
+          <tr><td>Is capture fast?</td><td>Time to save a voice moment</td><td>Moderated usability tests</td><td>Under 15 seconds</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="flows">
+  <div class="wrap">
+    <p class="eyebrow">Appendix · Design inventory</p>
+    <h2>The shipped flows</h2>
+    <p class="muted narrow">Exported from the Keepset App file in Figma, page "Design inventory": 61 iPhone screens on demo data, captured 18 Nov 2026. Read each row left to right; the line above each screen says how you get there. Scroll sideways.</p>
+    <div class="flowrow" id="flow-start"><div class="flowhead"><h3>Start</h3><p>First launch: welcome, onboarding, and App Lock on later launches. <span class="count">8 screens</span></p></div><div class="flowtrack" tabindex="0" aria-label="Start flow, scroll sideways"><figure class="fstep"><figcaption><b>Welcome</b><span>Launch picture</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/start-01.jpg" alt="Welcome" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Onboarding 1 · Welcome</b><span>Get started</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/start-02.jpg" alt="Onboarding 1 · Welcome" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Onboarding 2 · Privacy</b><span>Continue</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/start-03.jpg" alt="Onboarding 2 · Privacy" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Onboarding 3 · Pick</b><span>What to keep track of</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/start-04.jpg" alt="Onboarding 3 · Pick" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Onboarding 4 · Names</b><span>Name your keepers</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/start-05.jpg" alt="Onboarding 4 · Names" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Onboarding 5 · Reminders</b><span>Allow reminders or Not now</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/start-06.jpg" alt="Onboarding 5 · Reminders" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Onboarding 6 · App Lock</b><span>Ends on Home</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/start-07.jpg" alt="Onboarding 6 · App Lock" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>App Lock</b><span>Later launches, App Lock on</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/start-08.jpg" alt="App Lock" loading="lazy"></div></div></figure></div></div>
+    <div class="flowrow" id="flow-organizer"><div class="flowhead"><h3>Organizer</h3><p>Calendar of due items and what happened each day. <span class="count">2 screens</span></p></div><div class="flowtrack" tabindex="0" aria-label="Organizer flow, scroll sideways"><figure class="fstep"><figcaption><b>Organizer</b><span>Organizer tab, today</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/organizer-01.jpg" alt="Organizer" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Another day</b><span>Tap a day</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/organizer-02.jpg" alt="Another day" loading="lazy"></div></div></figure></div></div>
+    <div class="flowrow" id="flow-keeper"><div class="flowhead"><h3>Keeper</h3><p>One keeper flow (Max): list, page, menus, edit and delete. <span class="count">8 screens</span></p></div><div class="flowtrack" tabindex="0" aria-label="Keeper flow, scroll sideways"><figure class="fstep"><figcaption><b>Keeper list</b><span>Keeper tab</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/keeper-01.jpg" alt="Keeper list" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Max page</b><span>Tap Max</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/keeper-02.jpg" alt="Max page" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>More menu</b><span>••• top right</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/keeper-03.jpg" alt="More menu" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Edit keeper</b><span>More › Edit keeper</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/keeper-04.jpg" alt="Edit keeper" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Delete question</b><span>More › Delete keeper</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/keeper-05.jpg" alt="Delete question" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Card hold menu</b><span>Press and hold a card</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/keeper-06.jpg" alt="Card hold menu" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Swipe menu</b><span>Swipe a card left</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/keeper-07.jpg" alt="Swipe menu" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>New keeper</b><span>Add › New keeper</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/keeper-08.jpg" alt="New keeper" loading="lazy"></div></div></figure></div></div>
+    <div class="flowrow" id="flow-entries"><div class="flowhead"><h3>Entry pages</h3><p>Tap a card on Max’s page. One page per kind of entry. <span class="count">10 screens</span></p></div><div class="flowtrack" tabindex="0" aria-label="Entry pages flow, scroll sideways"><figure class="fstep"><figcaption><b>Voice moment</b><span>Vet visit</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/entries-01.jpg" alt="Voice moment" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Document</b><span>Rabies certificate</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/entries-02.jpg" alt="Document" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Photo</b><span>First day home</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/entries-03.jpg" alt="Photo" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Note</b><span>Food brand</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/entries-04.jpg" alt="Note" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Move to another keeper</b><span>••• › Move to another keeper</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/entries-05.jpg" alt="Move to another keeper" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Reminder</b><span>Next vaccine</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/entries-06.jpg" alt="Reminder" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Edit entry</b><span>Pencil, top right</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/entries-07.jpg" alt="Edit entry" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Place</b><span>Riverside Vet</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/entries-08.jpg" alt="Place" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Link</b><span>Puppy food guide</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/entries-09.jpg" alt="Link" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Contact</b><span>Dr. Rivera</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/entries-10.jpg" alt="Contact" loading="lazy"></div></div></figure></div></div>
+    <div class="flowrow" id="flow-add"><div class="flowhead"><h3>Add</h3><p>The + button. Saves to the keeper that is open. <span class="count">10 screens</span></p></div><div class="flowtrack" tabindex="0" aria-label="Add flow, scroll sideways"><figure class="fstep"><figcaption><b>Add sheet</b><span>+ button</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/add-01.jpg" alt="Add sheet" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Voice moment · Ready</b><span>Voice moment</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/add-02.jpg" alt="Voice moment · Ready" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Voice moment · Recording</b><span>Hold to talk, slide up to lock</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/add-03.jpg" alt="Voice moment · Recording" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Voice moment · Suggestions</b><span>Let go</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/add-04.jpg" alt="Voice moment · Suggestions" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Note</b><span>Add › Note</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/add-05.jpg" alt="Note" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Reminder</b><span>Add › Reminder</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/add-06.jpg" alt="Reminder" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Link</b><span>Add › Link</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/add-07.jpg" alt="Link" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Place</b><span>Add › Place</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/add-08.jpg" alt="Place" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Scan</b><span>Add › Scan, before the camera</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/add-09.jpg" alt="Scan" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>File</b><span>Add › File</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/add-10.jpg" alt="File" loading="lazy"></div></div></figure></div></div>
+    <div class="flowrow" id="flow-settings"><div class="flowhead"><h3>Settings</h3><p>Gear on Home, top right. <span class="count">15 screens</span></p></div><div class="flowtrack" tabindex="0" aria-label="Settings flow, scroll sideways"><figure class="fstep"><figcaption><b>Settings</b><span>Gear on Home</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/settings-01.jpg" alt="Settings" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Keepset Pro</b><span>Plan</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/settings-02.jpg" alt="Keepset Pro" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Categories</b><span>Organize</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/settings-03.jpg" alt="Categories" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Category editor</b><span>+ New category</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/settings-04.jpg" alt="Category editor" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Reminders</b><span>Organize</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/settings-05.jpg" alt="Reminders" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Calendar and Reminders</b><span>Organize</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/settings-06.jpg" alt="Calendar and Reminders" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>From Calendar</b><span>Bring in › From Calendar</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/settings-07.jpg" alt="From Calendar" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Privacy and security</b><span>Preferences</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/settings-08.jpg" alt="Privacy and security" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Smart features</b><span>Preferences</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/settings-09.jpg" alt="Smart features" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Voice</b><span>Preferences</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/settings-10.jpg" alt="Voice" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Appearance</b><span>Preferences</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/settings-11.jpg" alt="Appearance" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Siri and widgets</b><span>More</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/settings-12.jpg" alt="Siri and widgets" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Data</b><span>More</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/settings-13.jpg" alt="Data" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>About</b><span>More</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/settings-14.jpg" alt="About" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Privacy</b><span>About › Privacy</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/settings-15.jpg" alt="Privacy" loading="lazy"></div></div></figure></div></div>
+    <div class="flowrow" id="flow-pro"><div class="flowhead"><h3>Pro</h3><p>Keepset Pro: plans, and what happens when plans don’t load. <span class="count">3 screens</span></p></div><div class="flowtrack" tabindex="0" aria-label="Pro flow, scroll sideways"><figure class="fstep"><figcaption><b>Paywall</b><span>Keepset Pro › See plans</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/pro-01.jpg" alt="Paywall" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Plans didn’t load</b><span>Same, App Store unreachable</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/pro-02.jpg" alt="Plans didn’t load" loading="lazy"></div></div></figure><span class="farrow" aria-hidden="true">→</span><figure class="fstep"><figcaption><b>Share summary</b><span>Max › More › Share summary (Pro)</span></figcaption><div class="iphone"><div class="screen"><img src="images/flow-screens/pro-03.jpg" alt="Share summary" loading="lazy"></div></div></figure></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <p class="eyebrow">Reflection</p>
+    <h2>What made the difference</h2>
+    <ul class="clean">
+      <li><b>Write the plan, then build.</b> Each phase had checkable items and a review, so 14 phases took 2 days without losing quality.</li>
+      <li><b>The prototype is a reference, not the product.</b> Rebuilding natively made room for Liquid Glass, Dynamic Type and real platform behavior.</li>
+      <li><b>Testers find what the plan can't.</b> Real devices and App Review produced the most important design changes: permissions, empty states and sync.</li>
+      <li><b>Lessons compound.</b> 26 written lessons meant the same mistake never happened twice.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap"><a href="https://keepsetapp.com/">Keepset</a> · keepsetapp.com · Case study written 18 Nov 2026. iOS and macOS 1.1 (10) were waiting for App Review at the time of writing. Screens: Figma "Keepset App" › Design inventory.</div>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('themeToggle'), key='keepset-cs-theme';
+  try{var s=localStorage.getItem(key); if(s) root.setAttribute('data-theme',s);}catch(e){}
+  btn.addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    var next=cur==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    try{localStorage.setItem(key,next);}catch(e){}
+  });
+})();
+</script>
+</body>
+</html>
