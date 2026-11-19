@@ -104,16 +104,12 @@ section { padding-block: calc(var(--section) / 2); }
 .nav-links { display: none; gap: 4px; }
 .nav-links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; color: var(--text); text-decoration: none; font-size: 0.9375rem; font-weight: 500; }
 .nav-links a:hover { background: color-mix(in srgb, var(--text) 7%, transparent); }
-.nav-cta { white-space: nowrap; }
-.nav-cta .long, .nav-cta .mid { display: none; }
-@media (min-width: 48em) {
-  .nav-cta .mid { display: inline; }
-  .nav-cta .short { display: none; }
-}
-@media (min-width: 68.75em) {
-  .nav-cta .long { display: inline; }
-  .nav-cta .mid { display: none; }
-}
+/* Apple's official App Store badge (from Apple Marketing Tools). Scaled as a whole, never recolored or cropped. */
+.store-badge { display: inline-flex; align-items: center; min-height: 44px; border-radius: 10px; flex: none; }
+.store-badge img { height: 40px; width: auto; max-width: none; }
+.store-badge-lg img { height: 54px; }
+.nav-cta { display: none; }
+@media (min-width: 22.5em) { .nav-cta { display: inline-flex; } }
 .menu-btn, .menu-close {
   display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 0;
   background: color-mix(in srgb, var(--text) 7%, transparent); color: var(--text); cursor: pointer;
@@ -143,7 +139,7 @@ section { padding-block: calc(var(--section) / 2); }
   display: flex; align-items: center; min-height: 64px; padding: 0 12px;
   font-size: 1.75rem; font-weight: 700; color: var(--text); text-decoration: none; border-bottom: 0.5px solid var(--line);
 }
-.menu .btn { margin-top: auto; min-height: 56px; font-size: 1.125rem; }
+.menu .menu-badge { margin-top: auto; align-self: center; }
 @media (prefers-reduced-motion: no-preference) {
   .menu[open] { animation: menu-in 0.25s ease-out; }
   @keyframes menu-in { from { opacity: 0; transform: translateY(-12px); } }
